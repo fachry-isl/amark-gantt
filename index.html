@@ -218,9 +218,8 @@ function render() {
 
   // Rows
   const container = document.getElementById('rows');
-  let itemIdx = 0;
 
-  ITEMS.forEach(item => {
+  ITEMS.forEach((item, i) => {
     if (item.spacer) {
       const sp = document.createElement('div');
       sp.className = 'row spacer';
@@ -271,7 +270,7 @@ function render() {
       bar.className = `bar ${item.bar || 'planned'}`;
       bar.style.left = leftPct + '%';
       bar.style.width = widthPct + '%';
-      bar.dataset.idx = itemIdx;
+      bar.dataset.idx = i;
       bar.addEventListener('mouseenter', showTooltip);
       bar.addEventListener('mousemove', moveTooltip);
       bar.addEventListener('mouseleave', hideTooltip);
@@ -300,28 +299,16 @@ function render() {
       }
       track.appendChild(dateLabel);
     }
-
-    itemIdx++;
   });
 }
 
 // ── Tooltip ─────────────────────────────────────────────────────
 const tooltip = document.getElementById('tooltip');
 
-function getItemByIndex(idx) {
-  let count = 0;
-  for (const item of ITEMS) {
-    if (item.spacer || item.m) continue;
-    if (count === idx) return item;
-    count++;
-  }
-  return null;
-}
-
 function showTooltip(e) {
   const idx = parseInt(e.target.dataset.idx);
-  const item = ITEMS.filter(i => !i.spacer && !i.m)[idx];
-  if (!item) return;
+  const item = ITEMS[idx];
+  if (!item || item.spacer || !item.title) return;
 
   let html = `<div class="tt-title">${item.title}</div>`;
   html += `<div class="tt-meta">${item.status} · ${item.start || '?'} → ${item.end || '?'}</div>`;
