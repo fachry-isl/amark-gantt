@@ -29,10 +29,12 @@ h1{font-size:22px;font-weight:600;margin-bottom:4px;letter-spacing:-.3px;color:#
 .bar.target{background:linear-gradient(90deg,#10b981,#059669);box-shadow:0 0 8px rgba(16,185,129,.3)}
 .bar.planned{background:#6b7280;opacity:.7}
 .bar.future{background:#374151;opacity:.4}
+.bar.late{background:linear-gradient(90deg,#ef4444,#dc2626);box-shadow:0 0 8px rgba(239,68,68,.3)}
 .bar-date{position:absolute;font-size:9px;color:#64748b;white-space:nowrap;pointer-events:none;line-height:22px;padding-left:6px;font-weight:450}
 .bar-date.done{color:#4ade80}
 .bar-date.in-progress{color:#93c5fd}
 .bar-date.open{color:#fbbf24}
+.bar-date.late{color:#f87171}
 .time-labels{display:flex;margin-bottom:6px;margin-left:320px;position:relative;height:20px}
 .time-label{position:absolute;font-size:9px;color:#475569;transform:translateX(-50%);white-space:nowrap}
 .time-tick{position:absolute;top:0;width:1px;height:8px;background:#1e293b}
@@ -57,6 +59,7 @@ h1{font-size:22px;font-weight:600;margin-bottom:4px;letter-spacing:-.3px;color:#
   <span class="legend-item"><span class="legend-swatch" style="background:#f59e0b"></span> Open</span>
   <span class="legend-item"><span class="legend-swatch" style="background:#6b7280"></span> Planned</span>
   <span class="legend-item"><span class="legend-swatch" style="background:#374151"></span> Future</span>
+  <span class="legend-item"><span class="legend-swatch" style="background:#ef4444"></span> Late</span>
   <span style="flex:1"></span>
   <span class="legend-item" style="color:#475569">hover bars for details</span>
 </div>
@@ -83,7 +86,8 @@ const ITEMS = [
   // Dates: 'YYYY-MM-DD' or null for future
 
   // ── Milestone 1: MVP Phase ──
-  { m:"🚀 MILESTONE 1 — MVP PHASE", title:"Foundation Platform",     status:"✅ Done",  start:"2026-06-11", end:"2026-06-15", bar:"done",
+  { m:"🚀 MILESTONE 1 — MVP PHASE", title:"", status:"", start:null, end:null, bar:"" },
+  { m:null, title:"Foundation Platform",     status:"✅ Done",  start:"2026-06-11", end:"2026-06-15", bar:"done",
     sub:"Supabase auth · Org creation · API skeleton · ES256/JWKS middleware",
     refs:"#4 · PR #24 · PR #31" },
   { m:null, title:"Company Brain: Ingestion → RAG → Chat",           status:"✅ Done",  start:"2026-06-11", end:"2026-06-25", bar:"done",
@@ -106,25 +110,26 @@ const ITEMS = [
 
   // ── Milestone 2: Finance Recon Simulation & Validation ──
   // 🔴 Sprint: Jul 1–4 (this week)
-  { m:"🧪 MILESTONE 2 — FINANCE RECON SIMULATION & VALIDATION", title:"Requirements & Data Model Design", status:"🔄 In Progress", start:"2026-07-01", end:"2026-07-04", bar:"in-progress",
+  { m:"🧪 MILESTONE 2 — FINANCE RECON SIMULATION & VALIDATION", title:"", status:"", start:null, end:null, bar:"" },
+  { m:null, title:"Requirements & Data Model Design", status:"✅ Done", start:"2026-07-01", end:"2026-07-04", bar:"done",
     sub:"Define finance reconciliation data schema · Stakeholder requirements · Edge case mapping",
     refs:"New issues TBD" },
-  { m:null, title:"Simulation Design",                            status:"🔄 In Progress", start:"2026-07-01", end:"2026-07-04", bar:"in-progress",
+  { m:null, title:"Simulation Design",                            status:"✅ Done", start:"2026-07-01", end:"2026-07-04", bar:"done",
     sub:"Synthetic transaction pairs · Ground-truth set · Simulate scenarios · Data structure & matching rules",
     refs:"New issues TBD" },
-  { m:null, title:"Review Blocks (human-in-the-loop)",            status:"🔄 In Progress", start:"2026-07-01", end:"2026-07-04", bar:"in-progress",
+  { m:null, title:"Review Blocks (human-in-the-loop)",            status:"✅ Done", start:"2026-07-01", end:"2026-07-04", bar:"done",
     sub:"Review Page for multi-row data review · Approve/reject/edit workflow · Finance review UX",
     refs:"New issues TBD" },
-  { m:null, title:"Simulation Pipeline Setup",                    status:"🎯 On Track",   start:"2026-07-01", end:"2026-07-04", bar:"target",
+  { m:null, title:"Simulation Pipeline Setup",                    status:"✅ Done",   start:"2026-07-01", end:"2026-07-04", bar:"done",
     sub:"Configure agents/tasks · Wire Brain w/ stub docs · E2E simulation · Document gaps",
     refs:"New issues TBD" },
-  { m:null, title:"Walkthrough & Validation (Dev Demo)",          status:"🎯 On Track",   start:"2026-07-01", end:"2026-07-04", bar:"target",
+  { m:null, title:"Walkthrough & Validation (Dev Demo)",          status:"✅ Done",   start:"2026-07-01", end:"2026-07-04", bar:"done",
     sub:"Final demo with Dev Team (Mas Kevin) · Simulation walkthrough · Iterate logic · Sign-off",
     refs:"New issues TBD" },
-  { m:null, title:"Finance Team Showcase",                        status:"🔄 In Progress", start:"2026-07-13", end:"2026-07-14", bar:"in-progress",
+  { m:null, title:"Finance Team Showcase",                        status:"⏰ Late",         start:"2026-07-06", end:"2026-07-15", bar:"late",
     sub:"Present to Finance Team · Stakeholder Q&A · Feedback collection · Go-live approval",
     refs:"New issues TBD" },
-  { m:null, title:"Feature Iteration",                            status:"📋 Open",       start:"2026-07-06", end:"2026-07-11", bar:"open",
+  { m:null, title:"Feature Iteration",                            status:"🔄 In Progress", start:"2026-07-06", end:"2026-07-15", bar:"in-progress",
     sub:"Feature enhancement based on User Feedback · Iterate matching rules & review UX · Edge cases",
     refs:"New issues TBD" },
 
@@ -132,7 +137,8 @@ const ITEMS = [
 
   // ── Milestone 3: Production (sequential sprints) ──
   // 🎯 Jul 13 – Aug 26
-  { m:"🎯 MILESTONE 3 — PRODUCTION", title:"Remaining Access Control",           status:"📋 Open", start:"2026-07-13", end:"2026-07-18", bar:"open",
+  { m:"🎯 MILESTONE 3 — PRODUCTION", title:"", status:"", start:null, end:null, bar:"" },
+  { m:null, title:"Remaining Access Control",           status:"📋 Open", start:"2026-07-16", end:"2026-07-18", bar:"open",
     sub:"Department container for Projects · Google OAuth · Access scoping on retrieval",
     refs:"#41, #50, #10" },
   { m:null, title:"Agent Task Scheduler (Routine)",               status:"📋 Open", start:"2026-07-20", end:"2026-07-23", bar:"open",
@@ -160,7 +166,8 @@ const ITEMS = [
   { m:null, title:"", status:"", start:null, end:null, bar:"", spacer:true },
 
   // ── Milestone 4: Usecase Discovery ──
-  { m:"📋 MILESTONE 4 — USECASE DISCOVERY", title:"Finance Recon — Production Go-Live", status:"🎯 Target", start:"2026-08-27", end:"2026-08-29", bar:"target",
+  { m:"📋 MILESTONE 4 — USECASE DISCOVERY", title:"", status:"", start:null, end:null, bar:"" },
+  { m:null, title:"Finance Recon — Production Go-Live", status:"🎯 Target", start:"2026-08-27", end:"2026-08-29", bar:"done",
     sub:"Real transaction data · Full reconciliation · Exception handling · Performance tuning · Reporting",
     refs:"New issues TBD" },
   { m:null, title:"Usecase Discovery & Scoping",                  status:"📋 Open", start:"2026-08-31", end:"2026-09-03", bar:"open",
@@ -173,10 +180,11 @@ const ITEMS = [
   { m:null, title:"", status:"", start:null, end:null, bar:"", spacer:true },
 
   // ── Out of scope ──
-  { m:"⏸️ OUT OF SCOPE — est. 2026, detail TBD", title:"Hire an Agent (Phase 2): Agent Store, hiring flow, persistent memory", status:"⏳ TBD", start:"2027-01-01", end:"2027-06-30", bar:"future",
+  { m:"⏸️ OUT OF SCOPE — est. 2026, detail TBD", title:"", status:"", start:null, end:null, bar:"" },
+  { m:null, title:"Hire an Agent (Phase 2): Agent Store, hiring flow, persistent memory", status:"⏳ TBD", start:"2027-01-01", end:"2027-06-30", bar:"future",
     sub:"Marketplace · Hiring flow · Memory across tasks",
     refs:"No issues assigned" },
-  { m:null, title:"SaaS Launch (Phase 3): Billing, public sign-up, multi-org", status:"⏳ TBD", start:"2027-01-01", end:"2027-06-30", bar:"future",
+  { m:null, title:"SaaS Development (Phase 3): Billing, public sign-up, multi-org", status:"⏳ TBD", start:"2027-01-01", end:"2027-06-30", bar:"future",
     sub:"Stripe integration · Plan tiers · Public sign-up · Multi-org support",
     refs:"No issues assigned" },
 ];
@@ -217,9 +225,8 @@ function render() {
 
   // Rows
   const container = document.getElementById('rows');
-  let itemIdx = 0;
 
-  ITEMS.forEach(item => {
+  ITEMS.forEach((item, i) => {
     if (item.spacer) {
       const sp = document.createElement('div');
       sp.className = 'row spacer';
@@ -270,7 +277,7 @@ function render() {
       bar.className = `bar ${item.bar || 'planned'}`;
       bar.style.left = leftPct + '%';
       bar.style.width = widthPct + '%';
-      bar.dataset.idx = itemIdx;
+      bar.dataset.idx = i;
       bar.addEventListener('mouseenter', showTooltip);
       bar.addEventListener('mousemove', moveTooltip);
       bar.addEventListener('mouseleave', hideTooltip);
@@ -299,28 +306,16 @@ function render() {
       }
       track.appendChild(dateLabel);
     }
-
-    itemIdx++;
   });
 }
 
 // ── Tooltip ─────────────────────────────────────────────────────
 const tooltip = document.getElementById('tooltip');
 
-function getItemByIndex(idx) {
-  let count = 0;
-  for (const item of ITEMS) {
-    if (item.spacer || item.m) continue;
-    if (count === idx) return item;
-    count++;
-  }
-  return null;
-}
-
 function showTooltip(e) {
   const idx = parseInt(e.target.dataset.idx);
-  const item = ITEMS.filter(i => !i.spacer && !i.m)[idx];
-  if (!item) return;
+  const item = ITEMS[idx];
+  if (!item || item.spacer || !item.title) return;
 
   let html = `<div class="tt-title">${item.title}</div>`;
   html += `<div class="tt-meta">${item.status} · ${item.start || '?'} → ${item.end || '?'}</div>`;
